@@ -110,7 +110,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Final CTA Section */}
+      
       <section className="py-5 bg-dark text-white">
         <div className="container text-center">
           <h2 className="mb-4">Ready to Start Your Journey?</h2>

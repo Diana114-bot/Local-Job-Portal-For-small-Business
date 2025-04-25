@@ -1,42 +1,34 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import Login from './pages/LoginPage';
-import Register from './pages/RegisterPage';
-import ForgotPassword from './pages/ForgotPassword';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import ForgotPassword from './pages/ForgotPassword';
+import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
 
-
-const PrivateRoute = ({ children }) => {
-  const { currentUser } = useAuth();
-  return currentUser ? children : <Navigate to="/login" replace />;
-};
-
-function App() {
+const App = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
 
-          
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <DashboardPage />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </Router>
-    </AuthProvider>
+        
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+       
+        <Route path="/dashboard" element={<DashboardPage />} />
+
+        
+        <Route path="/employer/login" element={<LoginPage />} />
+        <Route path="/employer/register" element={<RegisterPage />} />
+        <Route path="/employer/forgot-password" element={<ForgotPassword />} />
+        <Route path="/employer/dashboard" element={<EmployerDashboardPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

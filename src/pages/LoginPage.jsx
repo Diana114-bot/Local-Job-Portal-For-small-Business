@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../firebase';
 
@@ -8,7 +8,10 @@ const Login = () => {
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
   const [resendVisible, setResendVisible] = useState(false);
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const isEmployer = location.pathname.startsWith('/employer');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,11 +37,13 @@ const Login = () => {
         return;
       }
 
-      navigate('/dashboard');
+      if (isEmployer) {
+        navigate('/employer/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error) {
-      console.error(error);
       let customMessage = 'Login failed. Please try again.';
-
       switch (error.code) {
         case 'auth/wrong-password':
         case 'auth/invalid-credential':
@@ -56,7 +61,6 @@ const Login = () => {
         default:
           customMessage = error.message;
       }
-
       setError(customMessage);
     }
   };
@@ -70,7 +74,6 @@ const Login = () => {
         setError('You must be logged in to resend the verification email.');
       }
     } catch (error) {
-      console.error(error);
       setError('Failed to resend verification email. ' + error.message);
     }
   };
@@ -79,7 +82,7 @@ const Login = () => {
     <div className="container min-vh-100 d-flex align-items-center justify-content-center">
       <div className="card shadow p-4" style={{ maxWidth: '450px', width: '100%' }}>
         <div className="card-body">
-          <h3 className="text-center mb-4">Login</h3>
+          <h3 className="text-center mb-4">{isEmployer ? 'Employer Login' : 'Login'}</h3>
 
           <form onSubmit={handleLogin}>
             <div className="mb-3">
@@ -123,11 +126,11 @@ const Login = () => {
           <div className="text-center mt-3">
             <small className="text-muted">
               Forgot your password?{' '}
-              <Link to="/forgot-password" className="text-decoration-none">Reset here</Link>
+              <Link to={isEmployer ? "/employer/forgot-password" : "/forgot-password"} className="text-decoration-none">Reset here</Link>
             </small><br />
             <small className="text-muted">
               Don’t have an account?{' '}
-              <Link to="/register" className="text-decoration-none">Register</Link>
+              <Link to={isEmployer ? "/employer/register" : "/register"} className="text-decoration-none">Register</Link>
             </small>
           </div>
         </div>

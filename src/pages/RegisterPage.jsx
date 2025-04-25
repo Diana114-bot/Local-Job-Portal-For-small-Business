@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../firebase';
@@ -25,6 +25,8 @@ const Register = () => {
   const [confirmValid, setConfirmValid] = useState(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const isEmployer = location.pathname.startsWith('/employer');
   const { login } = useAuth();
 
   const checkPasswordStrength = (password) => {
@@ -102,12 +104,10 @@ const Register = () => {
 
       toast.success('Account created! Please check your email to verify your account.');
 
-      
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate(isEmployer ? '/employer/dashboard' : '/dashboard');
       }, 2000);
     } catch (error) {
-      console.error(error);
       setError('Registration failed: ' + error.message);
     }
   };
@@ -116,11 +116,11 @@ const Register = () => {
     <div className="container min-vh-100 d-flex align-items-center justify-content-center">
       <div className="card shadow-lg p-4 mb-5 bg-body rounded" style={{ width: '100%', maxWidth: '500px' }}>
         <div className="card-body">
-          <Link to="/login" className="text-decoration-none text-muted mb-3 d-inline-block">
+          <Link to={isEmployer ? "/employer/login" : "/login"} className="text-decoration-none text-muted mb-3 d-inline-block">
             <i className="bi bi-arrow-left me-2"></i>Back to Login
           </Link>
 
-          <h2 className="text-primary text-center mb-4">Register</h2>
+          <h2 className="text-primary text-center mb-4">{isEmployer ? 'Employer Register' : 'Register'}</h2>
           <p className="text-muted text-center mb-4">Create your secure account</p>
 
           <form onSubmit={handleRegister}>
@@ -228,7 +228,7 @@ const Register = () => {
           <div className="text-center mt-3">
             <small className="text-muted">
               Already have an account?{' '}
-              <Link to="/login" className="text-decoration-none">Login</Link>
+              <Link to={isEmployer ? "/employer/login" : "/login"} className="text-decoration-none">Login</Link>
             </small>
           </div>
         </div>

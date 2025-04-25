@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../firebase';
 
@@ -7,13 +7,15 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const location = useLocation();
+  const isEmployer = location.pathname.startsWith('/employer');
 
   const handleReset = async (e) => {
     e.preventDefault();
     setMessage('');
     setError('');
 
-    if (!validateEmail(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('Please enter a valid email address.');
       return;
     }
@@ -22,7 +24,6 @@ const ForgotPassword = () => {
       await sendPasswordResetEmail(auth, email);
       setMessage('A password reset link has been sent to your email.');
     } catch (err) {
-      console.error(err);
       if (err.code === 'auth/user-not-found') {
         setError('No account found with that email.');
       } else {
@@ -31,15 +32,14 @@ const ForgotPassword = () => {
     }
   };
 
-  const validateEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
   return (
     <div className="container min-vh-100 d-flex align-items-center justify-content-center">
       <div className="card shadow-lg p-4 mb-5 bg-body rounded" style={{ width: '100%', maxWidth: '500px' }}>
         <div className="card-body">
-          <Link to="/login" className="text-decoration-none text-muted mb-3 d-inline-block">
+          <Link
+            to={isEmployer ? '/employer/login' : '/login'}
+            className="text-decoration-none text-muted mb-3 d-inline-block"
+          >
             <i className="bi bi-arrow-left me-2"></i>Back to Login
           </Link>
 

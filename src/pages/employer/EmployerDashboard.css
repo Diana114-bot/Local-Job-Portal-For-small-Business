@@ -1,0 +1,46 @@
+.employer-dashboard {
+    background-color: #f8f9fa;
+  }
+  
+  .dashboard-header {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .stats-card {
+    transition: transform 0.3s ease;
+  }
+  
+  .stats-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .action-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+  }
+  
+  .chart-placeholder {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0.6;
+  }
+  
+  .analysis-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .analysis-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .progress {
+    height: 6px;
+  }
