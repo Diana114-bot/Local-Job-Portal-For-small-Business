@@ -6,6 +6,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import ForgotPassword from './pages/ForgotPassword';
 import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
+import MyJobs from './components/dashboard/MyJobs';
+import Settings from './components/dashboard/Settings';
 
 const App = () => {
   return (
@@ -20,7 +22,8 @@ const App = () => {
 
        
         <Route path="/dashboard" element={<DashboardPage />} />
-
+        <Route path="/jobs" element={<MyJobs/>} />
+        <Route path="/settings" element={<Settings/>} />
         
         <Route path="/employer/login" element={<LoginPage />} />
         <Route path="/employer/register" element={<RegisterPage />} />

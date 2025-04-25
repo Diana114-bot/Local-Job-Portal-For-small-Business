@@ -99,11 +99,11 @@ const DashboardPage = () => {
             <User className="me-2" size={18} />
             My Profile
           </Button>
-          <Button variant="link" className="nav-link">
-            <Briefcase className="me-2" size={18} />
+          <Button variant="link" className="nav-link" onClick={() =>navigate('/jobs')}>
+            <Briefcase className="me-2" size={18}  />
             My Applications
           </Button>
-          <Button variant="link" className="nav-link">
+          <Button variant="link" className="nav-link" onClick={() =>  navigate('/settings')}>
             <Bell className="me-2" size={18} />
             Notifications
           </Button>
