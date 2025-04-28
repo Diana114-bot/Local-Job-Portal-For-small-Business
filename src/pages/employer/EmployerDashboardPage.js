@@ -86,7 +86,9 @@ const EmployerDashboardPage = () => {
             <Card className="p-3 shadow-sm h-100">
               <h5>Post New Job</h5>
               <p>Create new job listing and reach potential candidates</p>
-              <button className="btn btn-primary w-100">Post Job</button>
+              <Link to="post-job" className="btn btn-primary w-100">
+                Post Job
+              </Link>
             </Card>
           </div>
 

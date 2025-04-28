@@ -24,10 +24,7 @@ const Settings = () => {
         security: 'Password & Security',
         preferences: 'Preferences',
     };
-
-    const navigate = useNavigate();
-    const { logout } = useAuth();
-
+    
     useEffect(() => {
         const user = auth.currentUser;
         if (user?.email) {
@@ -40,46 +37,9 @@ const Settings = () => {
         }
     }, []);
 
-    const handleLogout = async () => {
-        try {
-            await logout();
-            navigate('/');
-        } catch (error) {
-            console.error('Logout error:', error.message);
-        }
-    };
-
+       
     return (
         <div className="dashboard-container">
-            {/* Sidebar */}
-            <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-                <div className="sidebar-header">
-                    <h4>CareerConnect Pro</h4>
-                </div>
-                <nav className="nav flex-column">
-                    <Button variant="link" className="nav-link active">
-                        <BarChart className="me-2" size={18} />
-                        Dashboard
-                    </Button>
-                    <Button variant="link" className="nav-link">
-                        <User className="me-2" size={18} />
-                        My Profile
-                    </Button>
-                    <Button variant="link" className="nav-link" onClick={() => navigate('/jobs')}>
-                        <Briefcase className="me-2" size={18} />
-                        My Applications
-                    </Button>
-                    <Button variant="link" className="nav-link" onClick={() => navigate('/settings')}>
-                        <Bell className="me-2" size={18} />
-                        Notifications
-                    </Button>
-                    <Button variant="outline-danger" onClick={handleLogout} className="m-3">
-                        <LogOut size={18} className="me-2" />
-                        Sign Out
-                    </Button>
-                </nav>
-            </div>
-
             {/* Main Content */}
             <div className="main-content">
                 <div className="d-flex flex-grow-1" style={{ overflow: 'auto' }}>

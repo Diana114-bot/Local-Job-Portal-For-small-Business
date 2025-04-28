@@ -5,26 +5,37 @@ import { Briefcase, ArrowLeft } from 'react-bootstrap-icons';
 
 const PostJobPage = () => {
   const [formData, setFormData] = useState({
-    title: '',
+    jobTitle: '',
     description: '',
-    location: '',
+    categoryType: '',
     salary: '',
-    category: '',
-    deadline: ''
+    salaryType: 'Per Month',
+    postalCode: '',
+    city: '',
+    streetName: '',
+    province: '',
+    applicationDeadline: '',
+    employmentType: '',
+    recruiterEmail: '',
+    recruiterCompanyName: '',
+    phoneNumber: '',
   });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.title) newErrors.title = 'Job title is required';
+    if (!formData.jobTitle) newErrors.jobTitle = 'Job title is required';
     if (!formData.description) newErrors.description = 'Description is required';
-    if (!formData.location) newErrors.location = 'Location is required';
+    if (!formData.city || !formData.streetName || !formData.province) {
+      newErrors.location = 'Complete location details are required';
+    }
     if (!formData.salary) newErrors.salary = 'Salary is required';
-    if (!formData.deadline) newErrors.deadline = 'Deadline is required';
+    if (!formData.applicationDeadline) newErrors.applicationDeadline = 'Application deadline is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,15 +44,32 @@ const PostJobPage = () => {
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3000);
       setFormData({
-        title: '',
+        jobTitle: '',
         description: '',
-        location: '',
+        categoryType: '',
         salary: '',
-        category: '',
-        deadline: ''
+        salaryType: 'Per Month',
+        postalCode: '',
+        city: '',
+        streetName: '',
+        province: '',
+        applicationDeadline: '',
+        employmentType: '',
+        recruiterEmail: '',
+        recruiterCompanyName: '',
+        phoneNumber: '',
       });
     }
   };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
 
   return (
     <div className="d-flex">
@@ -62,95 +90,203 @@ const PostJobPage = () => {
 
             {submitted && <Alert variant="success" className="text-center">Job posted successfully!</Alert>}
 
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-4">
-                <Form.Label>Job Title</Form.Label>
-                <Form.Control 
-                  type="text" 
-                  value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  isInvalid={!!errors.title}
-                />
-                <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="mb-4">
-                <Form.Label>Job Description</Form.Label>
-                <Form.Control 
-                  as="textarea" 
-                  rows={5}
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  isInvalid={!!errors.description}
-                />
-                <Form.Control.Feedback type="invalid">{errors.description}</Form.Control.Feedback>
-              </Form.Group>
-
-              <div className="row g-3 mb-4">
+            <form onSubmit={handleSubmit}>
+              <h5 className="text-primary mb-3">Job Details</h5>
+              <div className="row g-3">
                 <div className="col-md-6">
-                  <Form.Group>
-                    <Form.Label>Location</Form.Label>
-                    <Form.Control 
-                      type="text" 
-                      value={formData.location}
-                      onChange={(e) => setFormData({...formData, location: e.target.value})}
-                      isInvalid={!!errors.location}
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.location}</Form.Control.Feedback>
-                  </Form.Group>
+                  <label className="form-label">Job Title</label>
+                  <input
+                    type="text"
+                    name="jobTitle"
+                    className="form-control"
+                    placeholder="Type job title"
+                    value={formData.jobTitle}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
-                
+
                 <div className="col-md-6">
-                  <Form.Group>
-                    <Form.Label>Salary (ZAR)</Form.Label>
-                    <Form.Control 
-                      type="number" 
+                  <label className="form-label">Category (Industry)</label>
+                  <select
+                    name="categoryType"
+                    className="form-select"
+                    value={formData.categoryType}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select category</option>
+                    <option value="Retails & Sales">Retail & Sales (e.g cashier,sales assistant)</option>
+                    <option value="Hospitality" >Hospitality (e.g waiter, bartender)</option>
+                    <option value="Transportation & Sales">Transportation (e.g taxi driver,delivery driver)</option>
+                    <option value="Tech">Tech (e.g computer technician, web assistant)</option>
+                    <option value="Admin">Admin (e.g clerk, receptionist)</option>
+                    <option value="General Labor " >General Labor (e.g cleaning, construction)</option>
+                    <option value="Skilled Trades">Skilled Trades (e.g plumber,electrician)</option>
+                    <option value="Education">Education (e.g tutor, teaching assistant)</option>
+                  </select>
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label">Description</label>
+                  <textarea
+                    name="description"
+                    className="form-control"
+                    rows="4"
+                    placeholder="Detailed responsibilities and requirements"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                  ></textarea>
+                </div>
+
+                {/* Address Section */}
+                <h5 className="text-primary mt-4 mb-2">Job Location</h5>
+
+                <div className="col-md-6">
+                  <label className="form-label">Postal Code</label>
+                  <input
+                    type="text"
+                    name="postalCode"
+                    className="form-control"
+                    placeholder="Enter postal code"
+                    value={formData.postalCode}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">City</label>
+                  <input
+                    type="text"
+                    name="city"
+                    className="form-control"
+                    placeholder="Enter city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Street Name</label>
+                  <input
+                    type="text"
+                    name="streetName"
+                    className="form-control"
+                    placeholder="Enter street name"
+                    value={formData.streetName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Province</label>
+                  <input
+                    type="text"
+                    name="province"
+                    className="form-control"
+                    placeholder="Enter province"
+                    value={formData.province}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                {/* Employment & Salary */}
+                <div className="col-md-6">
+                  <label className="form-label">Application Deadline</label>
+                  <input
+                    type="date"
+                    name="applicationDeadline"
+                    className="form-control"
+                    value={formData.applicationDeadline}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                {/* Salary */}
+                <div className="col-md-6">
+                  <label className="form-label">Salary Range</label>
+                  <div className="input-group">
+                    <span className="input-group-text">R</span>
+                    <input
+                      type="text"
+                      name="salary"
+                      className="form-control"
+                      placeholder="Salary"
                       value={formData.salary}
-                      onChange={(e) => setFormData({...formData, salary: e.target.value})}
-                      isInvalid={!!errors.salary}
+                      onChange={handleChange}
                     />
-                    <Form.Control.Feedback type="invalid">{errors.salary}</Form.Control.Feedback>
-                  </Form.Group>
+                  </div>
+                  <select
+                    name="salaryType"
+                    className="form-select mt-2"
+                    value={formData.salaryType}
+                    onChange={handleChange}
+                  >
+                    <option>Per Month</option>
+                    <option>Per Year</option>
+                    <option>Per Hour</option>
+                    <option>Per Week</option>
+                  </select>
+                </div>
+
+              </div>
+
+              {/* Company Information */}
+              <h5 className="text-primary mt-5 mb-3">Company Information</h5>
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="form-label">Recruiter Company Name</label>
+                  <input
+                    type="text"
+                    name="recruiterCompanyName"
+                    className="form-control"
+                    placeholder="Recruiter Name"
+                    value={formData.recruiterCompanyName}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Recruiter Email</label>
+                  <input
+                    type="email"
+                    name="recruiterEmail"
+                    className="form-control"
+                    placeholder="Email"
+                    value={formData.recruiterEmail}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    className="form-control"
+                    placeholder="+27 (000) 000-0000"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
 
-              <div className="row g-3 mb-4">
-                <div className="col-md-6">
-                  <Form.Group>
-                    <Form.Label>Job Category</Form.Label>
-                    <Form.Select 
-                      value={formData.category}
-                      onChange={(e) => setFormData({...formData, category: e.target.value})}
-                    >
-                      <option value="">Select Category</option>
-                      <option value="retail">Retail</option>
-                      <option value="logistics">Logistics</option>
-                      <option value="hospitality">Hospitality</option>
-                      <option value="sales">Sales</option>
-                    </Form.Select>
-                  </Form.Group>
-                </div>
-                
-                <div className="col-md-6">
-                  <Form.Group>
-                    <Form.Label>Application Deadline</Form.Label>
-                    <Form.Control 
-                      type="date" 
-                      value={formData.deadline}
-                      onChange={(e) => setFormData({...formData, deadline: e.target.value})}
-                      isInvalid={!!errors.deadline}
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.deadline}</Form.Control.Feedback>
-                  </Form.Group>
-                </div>
-              </div>
 
-              <div className="text-center">
-                <Button variant="primary" type="submit" size="lg" className="px-5">
-                  Post Job
-                </Button>
+              {/* Submit */}
+              <div className="row g-3 mt-5">
+                <div className="col-12 d-grid">
+                  <button className="btn btn-primary btn-lg" type="submit"  disabled={submitted}>
+                    Post Vacancy
+                  </button>
+                </div>
               </div>
-            </Form>
+            </form>
           </Card.Body>
         </Card>
       </div>
