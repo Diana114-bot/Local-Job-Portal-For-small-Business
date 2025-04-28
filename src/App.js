@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import ForgotPassword from './pages/ForgotPassword';
 import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
 import EmployerApplicationsPage from './pages/employer/EmployerApplicationsPage';
+import PostJobPage from './pages/employer/PostJobPage';
 
 
 const App = () => {
@@ -29,7 +30,7 @@ const App = () => {
         <Route path="/employer/forgot-password" element={<ForgotPassword />} />
         <Route path="/employer/dashboard" element={<EmployerDashboardPage />} />
         <Route path="/employer/applications" element={<EmployerApplicationsPage />} />
-
+        <Route path="/employer/post-job" element={<PostJobPage />} />
     
       </Routes>
     </Router>
