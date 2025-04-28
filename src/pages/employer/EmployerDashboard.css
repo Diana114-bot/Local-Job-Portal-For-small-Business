@@ -1,46 +1,107 @@
+
 .employer-dashboard {
-    background-color: #f8f9fa;
+    background: #f4f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
-  .dashboard-header {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+ 
+  .dashboard-header h2 {
+    font-weight: 600;
+    color: #2c3e50;
   }
   
+  .dashboard-header small {
+    font-size: 0.9rem;
+  }
+  
+ 
   .stats-card {
-    transition: transform 0.3s ease;
+    border: none;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
   }
   
   .stats-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
   }
+  
   
   .action-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
-    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 16px;
+    background: #ffffff;
+    border: none;
+    transition: box-shadow 0.2s ease;
   }
   
-  .chart-placeholder {
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    opacity: 0.6;
+  .action-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   }
+  
+  .action-card .btn {
+    font-weight: 500;
+    border-radius: 8px;
+  }
+  
+  
+  .table {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+  }
+  
+  .table th {
+    color: #6c757d;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  .table td {
+    vertical-align: middle;
+    font-size: 0.92rem;
+  }
+  
+ 
+  .chart-placeholder {
+    padding: 30px;
+    text-align: center;
+    color: #999;
+    background: #f8f9fa;
+    border-radius: 12px;
+  }
+  
   
   .analysis-list {
     list-style: none;
-    padding-left: 0;
+    padding: 0;
+    margin: 0;
   }
   
   .analysis-list li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 0.95rem;
   }
   
-  .progress {
-    height: 6px;
+  .analysis-list li:last-child {
+    border-bottom: none;
   }
+  
+  
+  @media (max-width: 768px) {
+    .dashboard-header h2 {
+      font-size: 1.5rem;
+    }
+  
+    .stats-card,
+    .action-card {
+      borer-radus: 12px;
+    }
+  
+    .chart-placeholder {
+      padding: 20px;
+    }
+  }
+  
