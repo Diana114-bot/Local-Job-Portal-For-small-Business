@@ -8,7 +8,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
 import PostJobPage from './pages/employer/PostJobPage';
 import EmployerApplicationsPage from './pages/employer/EmployerApplicationsPage';
-
+import SettingsPage from './pages/employer/SettingsPage';
 
 const App = () => {
   return (
@@ -31,7 +31,7 @@ const App = () => {
         <Route path="/employer/dashboard" element={<EmployerDashboardPage />} />
         <Route path="/employer/applications" element={<EmployerApplicationsPage />} />
         <Route path="/employer/dashboard/post-job" element={<PostJobPage />} />
-    
+        <Route path="/employer/settings" element={<SettingsPage />} />
       </Routes>
     </Router>
   );
