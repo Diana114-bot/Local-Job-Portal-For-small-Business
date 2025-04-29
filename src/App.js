@@ -22,7 +22,13 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
             
        
-        <Route path="/dashboard" element={<DashboardPage />} />
+         {/* Nested Dashboard Routes */}
+        <Route path="/dashboard" element={<DashboardPage />}>
+  <Route path="profile" element={<Profile />} />
+  <Route path="myjobs" element={<MyJobs />} />
+  <Route path="settings" element={<Settings />} />
+  <Route path="NotificationPage" element={<NotificationPage />} />
+</Route>
 
         
         <Route path="/employer/login" element={<LoginPage />} />
