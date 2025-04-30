@@ -3,6 +3,8 @@ import { Container, Row, Col, Card, ProgressBar, Table, Badge } from 'react-boot
 import { Link } from 'react-router-dom';
 import { BarChart, Briefcase, FileEarmarkText, People, Plus } from 'react-bootstrap-icons';
 import './EmployerDashboard.css'; // Create this CSS file
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const EmployerDashboardPage = () => {
   // Mock data - replace with real API data
@@ -12,6 +14,19 @@ const EmployerDashboardPage = () => {
     newApplications: 23,
     interviewRate: 65
   };
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get('/api/employer/jobs');
+        setJobs(response.data);
+      } catch (error) {
+        console.error('Failed to fetch jobs:', error);
+      }
+    };
+    fetchJobs();
+  }, []);
 
   const recentApplications = [
     { id: 1, name: 'John Doe', position: 'Cashier', status: 'Pending', date: '2024-03-15' },
@@ -25,6 +40,15 @@ const EmployerDashboardPage = () => {
       case 'pending': return 'warning';
       case 'interviewed': return 'success';
       default: return 'secondary';
+    }
+  };
+
+  const handleDeleteJob = async (jobId) => {
+    try {
+      await axios.delete(`/api/employer/jobs/${jobId}`);
+      setJobs(jobs.filter(job => job.id !== jobId));
+    } catch (error) {
+      console.error('Failed to delete job:', error);
     }
   };
 
@@ -83,45 +107,35 @@ const EmployerDashboardPage = () => {
         </Col>
       </Row>
 
-      {/* Quick Actions */}
+      {/* Jobs Management */}
       <Row className="g-4 mb-4">
-        <Col md={4}>
-          <Card className="action-card shadow-sm h-100">
-            <Card.Body className="d-flex flex-column">
-              <div className="mb-3">
-                <Plus size={24} className="text-primary mb-2" />
-                <Card.Title>Post New Job</Card.Title>
-                <Card.Text>Create new job listing and reach potential candidates</Card.Text>
-              </div>
-              <Link to="/employer/post-job" className="btn btn-primary mt-auto">Post Job</Link>
-            </Card.Body>
-          </Card>
-        </Col>
-
-        <Col md={8}>
+        <Col>
           <Card className="shadow-sm h-100">
             <Card.Body>
-              <Card.Title className="mb-3">Recent Applications</Card.Title>
+              <Card.Title className="mb-3">Manage Posted Jobs</Card.Title>
               <Table hover responsive>
                 <thead>
                   <tr>
-                    <th>Candidate</th>
-                    <th>Position</th>
-                    <th>Status</th>
-                    <th>Date</th>
+                    <th>Job Title</th>
+                    <th>Category</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {recentApplications.map(application => (
-                    <tr key={application.id}>
-                      <td>{application.name}</td>
-                      <td>{application.position}</td>
+                  {jobs.map(job => (
+                    <tr key={job.id}>
+                      <td>{job.title}</td>
+                      <td>{job.category}</td>
                       <td>
-                        <Badge bg={getStatusVariant(application.status)}>
-                          {application.status}
-                        </Badge>
+                        <Link to={`/employer/jobs/${job.id}/edit`} className="btn btn-sm btn-outline-primary me-2">Update</Link>
+                        <button
+                          className="btn btn-sm btn-outline-danger me-2"
+                          onClick={() => handleDeleteJob(job.id)}
+                        >
+                          Delete
+                        </button>
+                        <Link to="/employer/post-job" className="btn btn-sm btn-outline-success">Add</Link>
                       </td>
-                      <td>{application.date}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -130,8 +144,6 @@ const EmployerDashboardPage = () => {
           </Card>
         </Col>
       </Row>
-
-      {/* Additional Sections */}
       <Row className="g-4">
         <Col md={6}>
           <Card className="shadow-sm h-100">

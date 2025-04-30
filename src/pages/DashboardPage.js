@@ -1,27 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X, BarChart, Bell, Briefcase, FileText, User, LogOut ,Settings } from 'react-feather';
 import { ProgressBar, Button } from 'react-bootstrap';
 import { auth } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import '../assets/dashboard.css';
 
-
-
 const DashboardPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [username, setUsername] = useState('');
-  const [applications, setApplications] = useState([
-    { id: 1, position: 'Retail Assistant', company: 'Local Market', status: 'Pending', date: '2024-03-15' },
-    { id: 2, position: 'Delivery Driver', company: 'Quick Logistics', status: 'In Review', date: '2024-03-14' },
-    { id: 3, position: 'Sales Associate', company: 'City Boutique', status: 'Accepted', date: '2024-03-12' },
-  ]);
+  const [applications, setApplications] = useState([]);
+  
+  useEffect(() => {
+    // Example: Fetch jobs from your backend API (replace URL with your actual endpoint)
+    const fetchApplications = async () => {
+      try {
+        const response = await fetch('/api/applications');
+        if (!response.ok) throw new Error('Failed to fetch applications');
+        const data = await response.json();
+        setApplications(data);
+      } catch (error) {
+        console.error('Error fetching applications:', error);
+      }
+    };
+    fetchApplications();
+  }, []);
 
   const [stats] = useState({
     applications: 15,
     interviews: 2,
     successRate: 68
   });
+
+  const [employerJobs, setEmployerJobs] = useState([
+    { id: 1, title: 'Software Engineer', company: 'Tech Corp', datePosted: '2025-04-01' },
+    { id: 2, title: 'Marketing Specialist', company: 'Ad Agency', datePosted: '2025-04-15' },
+  ]);
+
+  const [newJob, setNewJob] = useState({ title: '', company: '' });
+  const [editingJob, setEditingJob] = useState(null);
 
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -55,6 +72,21 @@ const DashboardPage = () => {
       case 'accepted': return 'bg-success text-white';
       default: return 'bg-secondary text-white';
     }
+  };
+
+  // Update an existing job
+  const handleUpdateJob = () => {
+    setEmployerJobs(
+      employerJobs.map(job =>
+        job.id === editingJob.id ? { ...editingJob, title: editingJob.title, company: editingJob.company } : job
+      )
+    );
+    setEditingJob(null);
+  };
+
+  // Delete a job
+  const handleDeleteJob = (id) => {
+    setEmployerJobs(employerJobs.filter(job => job.id !== id));
   };
 
   return (
@@ -155,6 +187,7 @@ const DashboardPage = () => {
                       <th>Company</th>
                       <th>Status</th>
                       <th>Date</th>
+                      <th>Posted By</th> {/* New column */}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -169,6 +202,7 @@ const DashboardPage = () => {
                           </span>
                         </td>
                         <td>{application.date}</td>
+                        <td>{application.postedBy}</td> {/* New data */}
                         <td>
                           <Button variant="link" size="sm">
                             <FileText size={16} className="me-1" />
@@ -194,6 +228,64 @@ const DashboardPage = () => {
               <small className="text-muted">
                 Add skills and experience to increase match rate by 40%
               </small>
+            </div>
+
+            {/* Employer Jobs Section */}
+            <div className="employer-jobs">
+              <h5>Manage Your Jobs</h5>
+
+              {/* Add Job Form */}
+             
+              {/* Employer Jobs Table */}
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Date Posted</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {employerJobs.map(job => (
+                    <tr key={job.id}>
+                      <td>{job.title}</td>
+                      <td>{job.company}</td>
+                      <td>{job.datePosted}</td>
+                      <td>
+                        <Button variant="link" size="sm" onClick={() => setEditingJob(job)}>
+                          Edit
+                        </Button>
+                        <Button variant="danger" size="sm" onClick={() => handleDeleteJob(job.id)}>
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Edit Job Form */}
+              {editingJob && (
+                <div className="edit-job-form">
+                  <h6>Edit Job</h6>
+                  <input
+                    type="text"
+                    placeholder="Job Title"
+                    value={editingJob.title}
+                    onChange={(e) => setEditingJob({ ...editingJob, title: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Company Name"
+                    value={editingJob.company}
+                    onChange={(e) => setEditingJob({ ...editingJob, company: e.target.value })}
+                  />
+                  <Button variant="success" onClick={handleUpdateJob}>
+                    Save Changes
+                  </Button>
+                </div>
+              )}
             </div>
           </>
         ) : (

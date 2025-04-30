@@ -64,7 +64,13 @@ const MyJobsPage = () => {
     fetchApplications(); // Fetch applications when the component mounts
   }, []);
 
- 
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
     <div className="container">
@@ -78,8 +84,7 @@ const MyJobsPage = () => {
           <div className="col-md-6 mb-4" key={job.id}>
             <div className="card shadow-sm h-100">
               <div className="card-body">
-                <h5 className="card-title">{job.jobTitle}</h5>
-                <h3 className="card-title">{job.companyName}</h3>
+                <h5 className="card-title">{job.title}</h5>
                 <p className="card-text">
                   <span className={getStatusBadgeClass(job.status)}>
                     {job.status}
