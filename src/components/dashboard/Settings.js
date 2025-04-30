@@ -24,10 +24,14 @@ const Settings = () => {
         security: 'Password & Security',
         preferences: 'Preferences',
     };
+<<<<<<< HEAD
 
     const navigate = useNavigate();
     const { logout } = useAuth();
 
+=======
+    
+>>>>>>> 7db86fd615d0191eef0beadb93485f85987fea69
     useEffect(() => {
         const user = auth.currentUser;
         if (user?.email) {
@@ -40,6 +44,7 @@ const Settings = () => {
         }
     }, []);
 
+<<<<<<< HEAD
     const handleLogout = async () => {
         try {
             await logout();
@@ -80,6 +85,11 @@ const Settings = () => {
                 </nav>
             </div>
 
+=======
+       
+    return (
+        <div className="dashboard-container">
+>>>>>>> 7db86fd615d0191eef0beadb93485f85987fea69
             {/* Main Content */}
             <div className="main-content">
                 <div className="d-flex flex-grow-1" style={{ overflow: 'auto' }}>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
@@ -38,3 +39,21 @@ const firestore = getFirestore(app);
 
 export { auth, firestore };
 
+=======
+import { initializeApp } from "firebase/app";
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBexR5IKfP3xTPcNDkA72Y1Zf0dknU05ZQ",
+  authDomain: "localzoneauthentication.firebaseapp.com",
+  projectId: "localzoneauthentication",
+  appId: "1:323084359792:web:14efaee888aa8409b2fcb5"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+export { auth, db };
+>>>>>>> 7db86fd615d0191eef0beadb93485f85987fea69

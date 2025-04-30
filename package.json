@@ -13,7 +13,10 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+<<<<<<< HEAD
     "axios": "^1.9.0",
+=======
+>>>>>>> 7db86fd615d0191eef0beadb93485f85987fea69
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
     "firebase": "^11.6.0",
@@ -27,8 +30,14 @@
     "react-google-recaptcha": "^3.1.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.0",
+<<<<<<< HEAD
     "react-scripts": "^5.0.1",
     "react-toastify": "^11.0.5",
+=======
+    "react-scripts": "5.0.1",
+    "react-toastify": "^11.0.5",
+    "recharts": "^2.15.3",
+>>>>>>> 7db86fd615d0191eef0beadb93485f85987fea69
     "web-vitals": "^2.1.4"
   },
   "scripts": {
