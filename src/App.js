@@ -9,6 +9,12 @@ import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
 import PostJobPage from './pages/employer/PostJobPage';
 import EmployerApplicationsPage from './pages/employer/EmployerApplicationsPage';
 import SettingsPage from './pages/employer/SettingsPage';
+import ManageJobsPage from './pages/employer/ManageJobsPage';
+import MyJobs from './components/dashboard/MyJobs';
+import Settings from './components/dashboard/Settings';
+import NotificationPage from './components/dashboard/NotificationPage';
+import Profile from './components/dashboard/Profile';
+import ProfilePage from './pages/employer/ProfilePage';
 
 const App = () => {
   return (
@@ -24,11 +30,11 @@ const App = () => {
        
          {/* Nested Dashboard Routes */}
         <Route path="/dashboard" element={<DashboardPage />}>
-  <Route path="profile" element={<Profile />} />
-  <Route path="myjobs" element={<MyJobs />} />
-  <Route path="settings" element={<Settings />} />
-  <Route path="NotificationPage" element={<NotificationPage />} />
-</Route>
+          <Route path="profile" element={<Profile />} />
+          <Route path="myjobs" element={<MyJobs />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="NotificationPage" element={<NotificationPage />} />
+        </Route>
 
         
         <Route path="/employer/login" element={<LoginPage />} />
@@ -38,7 +44,9 @@ const App = () => {
         <Route path="/employer/applications" element={<EmployerApplicationsPage />} />
         <Route path="/employer/dashboard/post-job" element={<PostJobPage />} />
         <Route path="/employer/settings" element={<SettingsPage />} />
-      </Routes>
+        <Route path="/employer/manage-jobs" element={<ManageJobsPage />} />
+        <Route path="/employer/profile" element={<ProfilePage/>} />
+       </Routes>
     </Router>
   );
 };

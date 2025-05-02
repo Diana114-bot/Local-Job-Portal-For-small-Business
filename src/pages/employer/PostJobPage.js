@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { Card, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Briefcase, ArrowLeft } from 'react-bootstrap-icons';
 
@@ -35,7 +35,7 @@ const PostJobPage = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -237,51 +237,11 @@ const PostJobPage = () => {
 
               </div>
 
-              {/* Company Information */}
-              <h5 className="text-primary mt-5 mb-3">Company Information</h5>
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label">Recruiter Company Name</label>
-                  <input
-                    type="text"
-                    name="recruiterCompanyName"
-                    className="form-control"
-                    placeholder="Recruiter Name"
-                    value={formData.recruiterCompanyName}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label">Recruiter Email</label>
-                  <input
-                    type="email"
-                    name="recruiterEmail"
-                    className="form-control"
-                    placeholder="Email"
-                    value={formData.recruiterEmail}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label">Phone Number</label>
-                  <input
-                    type="tel"
-                    name="phoneNumber"
-                    className="form-control"
-                    placeholder="+27 (000) 000-0000"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
 
               {/* Submit */}
               <div className="row g-3 mt-5">
                 <div className="col-12 d-grid">
-                  <button className="btn btn-primary btn-lg" type="submit"  disabled={submitted}>
+                  <button className="btn btn-primary btn-lg" type="submit" disabled={submitted}>
                     Post Vacancy
                   </button>
                 </div>

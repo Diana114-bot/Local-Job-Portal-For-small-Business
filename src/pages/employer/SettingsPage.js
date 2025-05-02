@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight } from 'react-bootstrap-icons';
+import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight, Person } from 'react-bootstrap-icons';
 import React, { useState } from 'react';
-import { BellRing, Shield, SlidersHorizontal, User } from 'lucide-react';
+import { BellRing, Shield, SlidersHorizontal } from 'lucide-react';
 
 const EmployerSidebar = ({ collapsed, toggleSidebar }) => {
     return (
@@ -14,6 +14,14 @@ const EmployerSidebar = ({ collapsed, toggleSidebar }) => {
                 <li className="mb-3">
                     <Link to="/employer/dashboard" className="text-decoration-none text-dark d-flex align-items-center">
                         <HouseDoor className="me-2" /> {!collapsed && 'Dashboard'}
+                    </Link>
+                </li>
+                <li className="mb-3">
+                    <Link
+                        to="/employer/profile"
+                        className="text-decoration-none text-dark d-flex align-items-center"
+                    >
+                        <Person className="me-2" /> {!collapsed && 'Profile'}
                     </Link>
                 </li>
                 <li className="mb-3">
@@ -51,6 +59,7 @@ const SettingsPage = () => {
         <div className="d-flex">
             <EmployerSidebar collapsed={collapsed} toggleSidebar={toggleSidebar} />
             <div className="main-content" style={{ flex: 1 }}>
+            <h3 className="mb-4">Settings</h3>
                 <div className="d-flex flex-grow-1" style={{ overflow: 'auto' }}>
                     {/* Tab List */}
                     <div className="bg-white border-end" style={{ minWidth: '220px', position: 'sticky', top: '0' }}>
@@ -153,8 +162,8 @@ const SettingsPage = () => {
                         {/* Application Management Settings Tab */}
                         {activeTab === 'applications' && (
                             <div className="mt-3">
-                                
-                                
+
+
                                 <div className="form-check form-switch mb-4">
                                     <input
                                         className="form-check-input"
