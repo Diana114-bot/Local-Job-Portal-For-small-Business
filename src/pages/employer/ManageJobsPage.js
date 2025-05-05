@@ -1,8 +1,10 @@
-import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight, CheckCircle,Person } from 'react-bootstrap-icons';
-import { FaEye, FaEdit, FaTrash,FaUser } from 'react-icons/fa';
+import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight, CheckCircle, Person } from 'react-bootstrap-icons';
+import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
-
+import { Modal, Row, Col ,Button } from 'react-bootstrap';
+import { FaMoneyBillWave } from 'react-icons/fa';
+import EditJobModal from './EditJobModal';
 
 // Sidebar Component
 const EmployerSidebar = ({ collapsed, toggleSidebar }) => {
@@ -89,40 +91,101 @@ function StatCard({ title, value, icon: Icon }) {
 
 // Main Page Component
 const ManageJobsPage = () => {
+    const [selectedJob, setSelectedJob] = useState(null);
+    const [showJobModal, setShowJobModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
+
+    //side bar
     const toggleSidebar = () => setCollapsed(!collapsed);
 
+    //handle view modal
+    const handleViewProfile = (job) => {
+        setSelectedJob(job);
+        setShowJobModal(true);
+    };
+
+    // handle edit modal
+    const [showModal, setShowModal] = useState(false);
+    const handleEditJob = (job) => {
+        setSelectedJob(job);
+        setShowModal(true);
+    };
+
+    //handle delete modal
+    const handleDeleteClick = (job) => {
+        setSelectedJob(job);
+        setShowDeleteModal(true);
+    };
+
+    //handling deleting from database (backend)
+    const handleConfirmDelete = (jobToDelete) => {
+        // Example: call your API or update state here
+        console.log("Deleting job:", jobToDelete);
+    
+        setShowDeleteModal(false);
+        setSelectedJob(null);
+    };
+
+    //close modal
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedJob(null); // Reset the selected job
+    };
+
+
     const [search, setSearch] = useState('');
-    const jobs = [
+    const jobData = [ //array of jobs replaced with  database jobs
         {
             title: 'General Ledger Accountant',
-            location: 'RG40, Wokingham',
             created: 'Dec 03, 2017',
-            expiry: 'Oct 22, 2018',
+            deadline: 'Oct 22, 2019',
             applications: 17,
-            status: 'Inactive',
+            salary: '10000',
+            categoryType: 'Hosipitality',
+            city: "Kempton Park",
+            streetName: "49 Namen Street",
+            province: "Gauteng",
+            postalCode: "0183",
+            status: 'Active',
+            description: 'Assist with accounting responsibilities'
         },
         {
             title: 'Car Financed Required For Bank',
-            location: 'London, United Kingdom',
             created: 'Dec 03, 2017',
-            expiry: 'Oct 22, 2018',
+            deadline: 'Oct 22, 2018',
             applications: 14,
             status: 'Active',
+            salary: '15758',
+            categoryType: 'Finance',
+            city: "Pretoria",
+            streetName: "49 Namen Street",
+            province: "Gauteng",
+            postalCode: "0183",
+            description: 'Assist office finance'
         },
         {
             title: 'UX/UI Designer',
-            location: 'RG40, Wokingham',
             created: 'Dec 03, 2017',
-            expiry: 'Oct 22, 2018',
+            deadline: 'Oct 22, 2020',
             applications: 5,
             status: 'Active',
+            salary: '1888',
+            categoryType: 'Tech',
+            city: "Soshanguve",
+            streetName: "49 Namen Street",
+            province: "Gauteng",
+            postalCode: "0183",
+            description: 'Assist in developing responsive websites using HTML, CSS, and JavaScript'
         },
     ];
 
-    const filteredJobs = jobs.filter((job) =>
-        job.title.toLowerCase().includes(search.toLowerCase())
-    );
+    //search job according to title, category type and will return filtered array that match the search
+    const filteredJobs = Array.isArray(jobData) ? jobData.filter(job =>
+        job.title.toLowerCase().includes(search.toLowerCase()) ||
+        job.categoryType.toLowerCase().includes(search.toLowerCase())
+    ) : [];
+
 
     return (
         <div className="d-flex">
@@ -142,7 +205,7 @@ const ManageJobsPage = () => {
                     </div>
                 </div>
 
-
+                {/* search field */}
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <input
                         type="text"
@@ -168,15 +231,16 @@ const ManageJobsPage = () => {
                             </tr>
                         </thead>
                         <tbody>
+                            {/*display all jobs or those searched */}
                             {filteredJobs.map((job, idx) => (
                                 <tr key={idx}>
                                     <td>
                                         <strong>{job.title}</strong>
                                         <br />
-                                        <small className="text-muted">{job.location}</small>
+                                        <small className="text-muted">{job.city}</small>
                                         <br />
                                         <small className="text-secondary">
-                                            Created: {job.created} | Expiry: {job.expiry}
+                                            Created: {job.created} | Expiry: {job.deadline}
                                         </small>
                                     </td>
                                     <td>{job.applications}</td>
@@ -186,13 +250,13 @@ const ManageJobsPage = () => {
                                         </span>
                                     </td>
                                     <td>
-                                        <button className="btn btn-sm btn-outline-primary me-2">
+                                        <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleViewProfile(job)}>
                                             <FaEye />
                                         </button>
-                                        <button className="btn btn-sm btn-outline-success me-2">
+                                        <button className="btn btn-sm btn-outline-success me-2" onClick={() => handleEditJob(job)}>
                                             <FaEdit />
                                         </button>
-                                        <button className="btn btn-sm btn-outline-danger">
+                                        <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteClick(job)}>
                                             <FaTrash />
                                         </button>
                                     </td>
@@ -201,6 +265,97 @@ const ManageJobsPage = () => {
                         </tbody>
                     </table>
                 </div>
+
+                {/* view job modal */}
+                <Modal show={showJobModal} onHide={() => setShowJobModal(false)} size="lg">
+                    <Modal.Header closeButton style={{ backgroundColor: '#007bff', color: '#fff' }}>
+                        <Modal.Title>Job Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {selectedJob && (
+                            <div>
+                                <h4 className="mb-3 text-primary">{selectedJob.jobTitle}</h4>
+
+                                <Row className="mb-3">
+                                    <Col md={6}>
+                                        <strong>Category:</strong>
+                                        <p>{selectedJob.categoryType}</p>
+                                    </Col>
+                                </Row>
+
+                                <strong>Description:</strong>
+                                <p>{selectedJob.description || selectedJob.description}</p>
+
+                                <hr />
+
+                                <h5 className="text-primary mt-4">Location</h5>
+                                <Row>
+                                    <Col md={6}>
+                                        <strong>Street:</strong>
+                                        <p>{selectedJob.streetName}</p>
+                                    </Col>
+                                    <Col md={6}>
+                                        <strong>City:</strong>
+                                        <p>{selectedJob.city}</p>
+                                    </Col>
+                                    <Col md={6}>
+                                        <strong>Province:</strong>
+                                        <p>{selectedJob.province}</p>
+                                    </Col>
+                                    <Col md={6}>
+                                        <strong>Postal Code:</strong>
+                                        <p>{selectedJob.postalCode}</p>
+                                    </Col>
+                                </Row>
+
+                                <hr />
+
+                                <h5 className="text-primary mt-4">Salary</h5>
+                                <p>
+                                    <FaMoneyBillWave className="me-2" />
+                                    R{selectedJob.salary} {selectedJob.salaryType}
+                                </p>
+
+                                <strong>Application Deadline:</strong>
+                                <p>{new Date(selectedJob.deadline).toLocaleDateString()}</p>
+
+                                <hr />
+                            </div>
+                        )}
+                    </Modal.Body>
+                </Modal>
+
+                {/* Edit job modal */}
+                {selectedJob && (
+                    <EditJobModal  //EditModal.js
+                        show={showModal}
+                        onHide={handleCloseModal}
+                        jobData={selectedJob}  // Pass the selected job data to the modal, and modal handles form saving
+                    />
+                )}
+
+                {/* Delete job modal */}
+                {selectedJob && (
+                    <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+                        <Modal.Header closeButton style={{ backgroundColor: '#dc3545', color: '#fff' }}>
+                            <Modal.Title>Confirm Deletion</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>
+                                Are you sure you want to delete the job <strong>"{selectedJob.title}"</strong>?
+                            </p>
+
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button variant="danger" onClick={()  => handleConfirmDelete(selectedJob)}> 
+                                Delete
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                )}
             </div>
         </div>
     );
