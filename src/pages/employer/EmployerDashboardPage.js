@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight } from 'react-bootstrap-icons';
 import { Card, ProgressBar } from 'react-bootstrap';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { getAuth, signOut } from 'firebase/auth';
 
 const EmployerSidebar = ({ collapsed, toggleSidebar }) => {
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      navigate('/');
+    });
+  };
+
   return (
     <div className={`bg-white shadow-sm p-3 d-flex flex-column ${collapsed ? 'align-items-center' : ''}`} style={{ minHeight: '100vh', width: collapsed ? '80px' : '250px', transition: '0.3s' }}>
       <button className="btn btn-link mb-4" onClick={toggleSidebar}>
@@ -33,9 +43,9 @@ const EmployerSidebar = ({ collapsed, toggleSidebar }) => {
           </Link>
         </li>
         <li>
-          <Link to="/employer/logout" className="text-decoration-none text-danger d-flex align-items-center">
+          <button onClick={handleLogout} className="btn btn-link text-danger d-flex align-items-center p-0">
             <BoxArrowRight className="me-2" /> {!collapsed && 'Logout'}
-          </Link>
+          </button>
         </li>
       </ul>
     </div>

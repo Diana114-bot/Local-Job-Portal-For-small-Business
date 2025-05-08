@@ -11,8 +11,23 @@ import {
   BarChart,
   LogOut
 } from 'react-feather';
+import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      navigate('/');
+    }
+  };
+
   const navSections = [
     {
       title: 'Job Seeker',
@@ -75,7 +90,11 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       ))}
 
       <div className="mt-auto border-top pt-3">
-        <button className="btn btn-link text-white text-start w-100 d-flex align-items-center gap-2">
+        <button 
+          className="btn btn-link text-white text-start w-100 d-flex align-items-center gap-2"
+          onClick={handleLogout}
+          type="button"
+        >
           <LogOut size={18} />
           Logout
         </button>

@@ -97,7 +97,7 @@
   
     .stats-card,
     .action-card {
-      borer-radus: 12px;
+      border-radius: 12px;
     }
   
     .chart-placeholder {
