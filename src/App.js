@@ -7,22 +7,26 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPassword from './pages/ForgotPassword';
 
-// Employer Pages
-import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
-import PostJobPage from './pages/employer/PostJobPage';
-import EmployerApplicationsPage from './pages/employer/EmployerApplicationsPage';
-import SettingsPage from './pages/employer/SettingsPage';
-
-// Job Seeker Components
-import DashboardPage from './pages/DashboardPage'; // Added missing import
+// Job Seeker Pages
+import DashboardPage from './pages/DashboardPage';
 import Profile from './components/dashboard/Profile';
 import MyJobs from './components/dashboard/MyJobs';
 import Settings from './components/dashboard/Settings';
 import NotificationPage from './components/dashboard/NotificationPage';
 
-// Admin Components
-import AdminLayout from './admin/AdminLayout'; // Fixed import path to correct location
+// Employer Pages
+import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
+import PostJobPage from './pages/employer/PostJobPage';
+import EmployerApplicationsPage from './pages/employer/EmployerApplicationsPage';
+import SettingsPage from './pages/employer/SettingsPage';
+//import ManageJobsPage from './pages/employer/ManageJobsPage';
+// import ProfilePage from './pages/employer/ProfilePage'; // ← Temporarily commented out
+
+// Admin Pages
+import AdminLayout from './admin/AdminLayout';
 import AdminDashboard from './admin/pages/AdminDashboard';
+
+// Shared Logic
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -40,7 +44,7 @@ const App = () => {
         <Route path="/employer/register" element={<RegisterPage />} />
         <Route path="/employer/forgot-password" element={<ForgotPassword />} />
 
-        {/* Job Seeker Dashboard */}
+        {/* Job Seeker Dashboard Routes */}
         <Route
           path="/dashboard"
           element={
@@ -55,7 +59,7 @@ const App = () => {
           <Route path="notifications" element={<NotificationPage />} />
         </Route>
 
-        {/* Employer Dashboard */}
+        {/* Employer Dashboard Routes */}
         <Route
           path="/employer/dashboard"
           element={
@@ -88,8 +92,24 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        {/*<Route
+          path="/employer/manage-jobs"
+          element={
+            <ProtectedRoute allowedRoles={['employer']}>
+              <ManageJobsPage />
+            </ProtectedRoute>
+          }
+        />*/}
+        {/* <Route
+          path="/employer/profile"
+          element={
+            <ProtectedRoute allowedRoles={['employer']}>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        /> */}
 
-        {/* Admin Dashboard */}
+        {/* Admin Routes */}
         <Route
           path="/admin/*"
           element={
