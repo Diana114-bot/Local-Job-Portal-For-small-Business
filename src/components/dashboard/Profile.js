@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
+// Assuming Firebase has been initialized elsewhere in your project
+
+const db = getFirestore();
 
 function Profile() {
   const [editingSection, setEditingSection] = useState(null);
 
+  const auth = getAuth();
+  const userEmail = auth.currentUser ? auth.currentUser.email : 'cb@example.com';
+
   const [personalInfo, setPersonalInfo] = useState({
     name: 'Caleb Porter',
-    email: 'cb@example.com',
+    email: userEmail,
     phone: '060 709 6324',
   });
 
@@ -36,8 +44,61 @@ function Profile() {
 
   const [skills, setSkills] = useState(['App Design', 'Photoshop', 'Illustration']);
 
+  // Handle file uploads
   const handleResumeUpload = (e) => setResume(e.target.files[0]);
   const handleProfilePicUpload = (e) => setProfilePicture(URL.createObjectURL(e.target.files[0]));
+
+  // Load profile from Firebase if it exists
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const docRef = doc(db, "profiles", personalInfo.email);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setPersonalInfo(data.personalInfo);
+          setJobPreferences(data.jobPreferences);
+          setSocialLinks(data.socialLinks);
+          setExperience(data.experience);
+          setEducation(data.education);
+          setSkills(data.skills);
+          // For files, you might store URLs instead.
+          setProfilePicture(data.profilePicture);
+          // resume can be handled similarly (e.g., storing the file name or URL)
+        }
+      } catch (error) {
+        console.error("Error loading profile from Firebase:", error);
+      }
+    };
+
+    loadProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Save the complete profile to Firebase
+  const saveProfileToFirebase = async () => {
+    try {
+      const profileData = {
+        personalInfo,
+        jobPreferences,
+        socialLinks,
+        experience,
+        education,
+        skills,
+        // If you have storage set up for files, you can store URLs or file names
+        resume: resume ? resume.name : null,
+        profilePicture,
+      };
+
+      const docRef = doc(db, "profiles", personalInfo.email);
+      // setDoc will create or overwrite the profile document
+      await setDoc(docRef, profileData);
+      alert("Profile saved successfully!");
+    } catch (error) {
+      console.error("Error saving profile to Firebase:", error);
+      alert("Error saving profile. Please try again.");
+    }
+  };
 
   return (
     <div className="container mt-5" style={{ maxWidth: '800px' }}>
@@ -72,7 +133,12 @@ function Profile() {
               value={personalInfo.phone}
               onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })}
             />
-            <button className="btn btn-success" onClick={() => setEditingSection(null)}>Save</button>
+            <button
+              className="btn btn-success"
+              onClick={() => { setEditingSection(null); saveProfileToFirebase(); }}
+            >
+              Save
+            </button>
           </>
         ) : (
           <>
@@ -109,7 +175,12 @@ function Profile() {
                 }}
               />
             ))}
-            <button className="btn btn-info mb-3" onClick={() => setJobPreferences({ ...jobPreferences, roles: [...jobPreferences.roles, ''] })}>Add Role</button>
+            <button
+              className="btn btn-info mb-3"
+              onClick={() => setJobPreferences({ ...jobPreferences, roles: [...jobPreferences.roles, ''] })}
+            >
+              Add Role
+            </button>
 
             <h5>Type</h5>
             {jobPreferences.jobType.map((type, idx) => (
@@ -124,7 +195,12 @@ function Profile() {
                 }}
               />
             ))}
-            <button className="btn btn-info mb-3" onClick={() => setJobPreferences({ ...jobPreferences, jobType: [...jobPreferences.jobType, ''] })}>Add Type</button>
+            <button
+              className="btn btn-info mb-3"
+              onClick={() => setJobPreferences({ ...jobPreferences, jobType: [...jobPreferences.jobType, ''] })}
+            >
+              Add Type
+            </button>
 
             <h5>Location</h5>
             {jobPreferences.location.map((loc, idx) => (
@@ -139,10 +215,20 @@ function Profile() {
                 }}
               />
             ))}
-            <button className="btn btn-info mb-3" onClick={() => setJobPreferences({ ...jobPreferences, location: [...jobPreferences.location, ''] })}>Add Location</button>
+            <button
+              className="btn btn-info mb-3"
+              onClick={() => setJobPreferences({ ...jobPreferences, location: [...jobPreferences.location, ''] })}
+            >
+              Add Location
+            </button>
 
             <br />
-            <button className="btn btn-success" onClick={() => setEditingSection(null)}>Save</button>
+            <button
+              className="btn btn-success"
+              onClick={() => { setEditingSection(null); saveProfileToFirebase(); }}
+            >
+              Save
+            </button>
           </>
         ) : (
           <>
@@ -183,9 +269,19 @@ function Profile() {
                 />
               </div>
             ))}
-            <button className="btn btn-info mb-3" onClick={() => setSocialLinks([...socialLinks, { label: '', url: '' }])}>Add Social Link</button>
+            <button
+              className="btn btn-info mb-3"
+              onClick={() => setSocialLinks([...socialLinks, { label: '', url: '' }])}
+            >
+              Add Social Link
+            </button>
             <br />
-            <button className="btn btn-success" onClick={() => setEditingSection(null)}>Save</button>
+            <button
+              className="btn btn-success"
+              onClick={() => { setEditingSection(null); saveProfileToFirebase(); }}
+            >
+              Save
+            </button>
           </>
         ) : (
           <>
@@ -233,9 +329,19 @@ function Profile() {
                 />
               </div>
             ))}
-            <button className="btn btn-info mb-3" onClick={() => setExperience([...experience, { title: '', company: '', year: '' }])}>Add Experience</button>
+            <button
+              className="btn btn-info mb-3"
+              onClick={() => setExperience([...experience, { title: '', company: '', year: '' }])}
+            >
+              Add Experience
+            </button>
             <br />
-            <button className="btn btn-success" onClick={() => setEditingSection(null)}>Save</button>
+            <button
+              className="btn btn-success"
+              onClick={() => { setEditingSection(null); saveProfileToFirebase(); }}
+            >
+              Save
+            </button>
           </>
         ) : (
           <>
@@ -283,9 +389,19 @@ function Profile() {
                 />
               </div>
             ))}
-            <button className="btn btn-info mb-3" onClick={() => setEducation([...education, { level: '', school: '', year: '' }])}>Add Education</button>
+            <button
+              className="btn btn-info mb-3"
+              onClick={() => setEducation([...education, { level: '', school: '', year: '' }])}
+            >
+              Add Education
+            </button>
             <br />
-            <button className="btn btn-success" onClick={() => setEditingSection(null)}>Save</button>
+            <button
+              className="btn btn-success"
+              onClick={() => { setEditingSection(null); saveProfileToFirebase(); }}
+            >
+              Save
+            </button>
           </>
         ) : (
           <>
@@ -317,7 +433,9 @@ function Profile() {
             ))}
             <button className="btn btn-info mb-3" onClick={() => setSkills([...skills, ''])}>Add Skill</button>
             <br />
-            <button className="btn btn-success" onClick={() => setEditingSection(null)}>Save</button>
+            <button className="btn btn-success" onClick={() => { setEditingSection(null); saveProfileToFirebase(); }}>
+              Save
+            </button>
           </>
         ) : (
           <>
@@ -330,6 +448,13 @@ function Profile() {
           </>
         )}
       </section>
+      
+      {/* Save Profile Button */}
+      <div className="mb-4">
+        <button className="btn btn-success" onClick={saveProfileToFirebase}>
+          Save Profile to Firebase
+        </button>
+      </div>
     </div>
   );
 }

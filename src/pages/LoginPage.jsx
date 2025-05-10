@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
 
 const Login = () => {
@@ -12,6 +12,18 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isEmployer = location.pathname.startsWith('/employer');
+
+  // Monitor authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && user.emailVerified) {
+        // Redirect to the appropriate dashboard if already logged in
+        navigate(isEmployer ? '/employer/dashboard' : '/dashboard');
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup listener on component unmount
+  }, [navigate, isEmployer]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,11 +49,8 @@ const Login = () => {
         return;
       }
 
-      if (isEmployer) {
-        navigate('/employer/dashboard');
-      } else {
-        navigate('/dashboard');
-      }
+      // Redirect after successful login
+      navigate(isEmployer ? '/employer/dashboard' : '/dashboard');
     } catch (error) {
       let customMessage = 'Login failed. Please try again.';
       switch (error.code) {

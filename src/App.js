@@ -15,6 +15,7 @@ import Settings from './components/dashboard/Settings';
 import NotificationPage from './components/dashboard/NotificationPage';
 import Profile from './components/dashboard/Profile';
 import ProfilePage from './pages/employer/ProfilePage';
+import AddApplicationsPage from './components/dashboard/AddApplicationsPage'; // Corrected path
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="myjobs" element={<MyJobs />} />
           <Route path="settings" element={<Settings />} />
           <Route path="NotificationPage" element={<NotificationPage />} />
+          <Route path="myapplications" element={<AddApplicationsPage />} /> {/* Add this route */}
         </Route>
 
         

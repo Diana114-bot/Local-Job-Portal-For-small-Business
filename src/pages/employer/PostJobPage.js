@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { Card, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Briefcase, ArrowLeft } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const PostJobPage = () => {
+  const navigate = useNavigate();
+  const db = getFirestore();
+  const auth = getAuth();
+  const user = auth.currentUser;
   const [formData, setFormData] = useState({
     jobTitle: '',
     description: '',
@@ -16,7 +23,7 @@ const PostJobPage = () => {
     province: '',
     applicationDeadline: '',
     employmentType: '',
-    recruiterEmail: '',
+    recruiterEmail: user?.email || '',
     recruiterCompanyName: '',
     phoneNumber: '',
   });
@@ -36,29 +43,31 @@ const PostJobPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log('Form data:', formData);
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3000);
-      setFormData({
-        jobTitle: '',
-        description: '',
-        categoryType: '',
-        salary: '',
-        salaryType: 'Per Month',
-        postalCode: '',
-        city: '',
-        streetName: '',
-        province: '',
-        applicationDeadline: '',
-        employmentType: '',
-        recruiterEmail: '',
-        recruiterCompanyName: '',
-        phoneNumber: '',
-      });
+      try {
+        const db = getFirestore();
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const userEmail = user?.email || 'unknown';
+
+        const jobData = {
+          ...formData,
+          userEmail,
+          recruiterId: user?.uid || 'unknown',
+          createdAt: new Date(),
+        };
+
+        await addDoc(collection(db, "jobs"), jobData);
+        setSubmitted(true);
+        // Redirect to dashboard after a short delay if needed
+        setTimeout(() => {
+          navigate("/employer/dashboard");
+        }, 1000);
+      } catch (error) {
+        console.error("Error posting job:", error.message);
+      }
     }
   };
 
@@ -69,7 +78,6 @@ const PostJobPage = () => {
       [name]: type === 'checkbox' ? checked : value,
     }));
   };
-
 
   return (
     <div className="d-flex">
@@ -116,13 +124,13 @@ const PostJobPage = () => {
                     required
                   >
                     <option value="">Select category</option>
-                    <option value="Retails & Sales">Retail & Sales (e.g cashier,sales assistant)</option>
-                    <option value="Hospitality" >Hospitality (e.g waiter, bartender)</option>
-                    <option value="Transportation & Sales">Transportation (e.g taxi driver,delivery driver)</option>
+                    <option value="Retails & Sales">Retail & Sales (e.g cashier, sales assistant)</option>
+                    <option value="Hospitality">Hospitality (e.g waiter, bartender)</option>
+                    <option value="Transportation & Sales">Transportation (e.g taxi driver, delivery driver)</option>
                     <option value="Tech">Tech (e.g computer technician, web assistant)</option>
                     <option value="Admin">Admin (e.g clerk, receptionist)</option>
-                    <option value="General Labor " >General Labor (e.g cleaning, construction)</option>
-                    <option value="Skilled Trades">Skilled Trades (e.g plumber,electrician)</option>
+                    <option value="General Labor">General Labor (e.g cleaning, construction)</option>
+                    <option value="Skilled Trades">Skilled Trades (e.g plumber, electrician)</option>
                     <option value="Education">Education (e.g tutor, teaching assistant)</option>
                   </select>
                 </div>
@@ -140,9 +148,7 @@ const PostJobPage = () => {
                   ></textarea>
                 </div>
 
-                {/* Address Section */}
                 <h5 className="text-primary mt-4 mb-2">Job Location</h5>
-
                 <div className="col-md-6">
                   <label className="form-label">Postal Code</label>
                   <input
@@ -195,7 +201,6 @@ const PostJobPage = () => {
                   />
                 </div>
 
-                {/* Employment & Salary */}
                 <div className="col-md-6">
                   <label className="form-label">Application Deadline</label>
                   <input
@@ -208,7 +213,6 @@ const PostJobPage = () => {
                   />
                 </div>
 
-                {/* Salary */}
                 <div className="col-md-6">
                   <label className="form-label">Salary Range</label>
                   <div className="input-group">
@@ -234,11 +238,8 @@ const PostJobPage = () => {
                     <option>Per Week</option>
                   </select>
                 </div>
-
               </div>
 
-
-              {/* Submit */}
               <div className="row g-3 mt-5">
                 <div className="col-12 d-grid">
                   <button className="btn btn-primary btn-lg" type="submit" disabled={submitted}>
