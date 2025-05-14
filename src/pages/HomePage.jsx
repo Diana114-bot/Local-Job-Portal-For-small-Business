@@ -17,7 +17,7 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-     <TopNavbar title="JobConnect" showLogin={true} />
+     <TopNavbar title={<span style={{fontStyle: "italic"}}>Thanix</span>} showLogin={false} />
 
 
 

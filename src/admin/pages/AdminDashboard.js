@@ -1,4 +1,4 @@
-// src/admin/pages/AdminDashboard.js
+
 import { FiUsers, FiBriefcase, FiActivity, FiDollarSign } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 
@@ -19,7 +19,7 @@ const recentActivities = [
 export default function AdminDashboard() {
   return (
     <div className="admin-dashboard">
-      {/* Stats Overview */}
+     
       <div className="row g-4 mb-4">
         <div className="col-12 col-sm-6 col-xl-3">
           <div className="stats-card bg-primary text-white">
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Charts Row */}
+      
       <div className="row g-4 mb-4">
         <div className="col-12 col-lg-8">
           <div className="chart-container">
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Recent Activities */}
+     
       <div className="recent-activities">
         <h4>Recent Activities</h4>
         <div className="activity-list">

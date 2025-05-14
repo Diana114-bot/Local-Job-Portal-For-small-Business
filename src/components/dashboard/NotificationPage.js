@@ -1,4 +1,4 @@
-// src/pages/NotificationPage.jsx
+
 
 import React, { useEffect, useState } from 'react';
 import { Bell } from 'react-feather';
@@ -9,7 +9,7 @@ const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Simulate fetching notifications from backend
+    
     const fetchedNotifications = [
       {
         id: 1,

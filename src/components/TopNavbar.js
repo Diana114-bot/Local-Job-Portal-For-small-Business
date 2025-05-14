@@ -7,14 +7,14 @@ const TopNavbar = ({ onLogout }) => {
   const { currentUser } = useAuth();
   const location = useLocation();
 
-  
   const isDashboard = location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/profile');
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light px-4 border-bottom shadow-sm">
       <div className="container-fluid">
-        <Link to="/" className="navbar-brand fw-bold text-primary">
-          HireZone
+        {/* Changed: Replaced HireZone with italic Thanix */}
+        <Link to="/" className="navbar-brand fw-bold text-primary" style={{ fontStyle: 'italic' }}>
+          Thanix
         </Link>
 
         <div className="d-flex align-items-center ms-auto">
@@ -31,9 +31,8 @@ const TopNavbar = ({ onLogout }) => {
               </button>
             </>
           ) : (
-            <Link to="/login" className="btn btn-outline-primary">
-              Login
-            </Link>
+            // Removed login button 
+            null
           )}
         </div>
       </div>

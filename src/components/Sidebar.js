@@ -6,25 +6,22 @@ import {
   User, 
   Bell, 
   Settings, 
-  PlusCircle,
-  Users,
   BarChart,
   LogOut
 } from 'react-feather';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      navigate('/');
+      await logout();
+      navigate('/login');
     } catch (error) {
       console.error('Logout error:', error);
-      navigate('/');
     }
   };
 
@@ -33,17 +30,9 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       title: 'Job Seeker',
       items: [
         { key: 'dashboard', label: 'Dashboard', icon: <Home size={18} /> },
-        { key: 'jobs', label: 'Browse Jobs', icon: <Briefcase size={18} /> },
+        { key: 'browse', label: 'Browse Jobs', icon: <Briefcase size={18} /> },
         { key: 'applications', label: 'My Applications', icon: <FileText size={18} /> },
         { key: 'profile', label: 'My Profile', icon: <User size={18} /> }
-      ]
-    },
-    {
-      title: 'Employer',
-      items: [
-        { key: 'post-job', label: 'Post a Job', icon: <PlusCircle size={18} /> },
-        { key: 'manage-jobs', label: 'Manage Jobs', icon: <Briefcase size={18} /> },
-        { key: 'candidates', label: 'View Candidates', icon: <Users size={18} /> }
       ]
     },
     {
@@ -54,9 +43,9 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       ]
     },
     {
-      title: 'Admin',
+      title: 'Insights',
       items: [
-        { key: 'analytics', label: 'Analytics', icon: <BarChart size={18} /> }
+        { key: 'analytics', label: 'Career Analytics', icon: <BarChart size={18} /> }
       ]
     }
   ];
