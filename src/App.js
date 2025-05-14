@@ -19,14 +19,14 @@ import EmployerDashboardPage from './pages/employer/EmployerDashboardPage';
 import PostJobPage from './pages/employer/PostJobPage';
 import EmployerApplicationsPage from './pages/employer/EmployerApplicationsPage';
 import SettingsPage from './pages/employer/SettingsPage';
-//import ManageJobsPage from './pages/employer/ManageJobsPage';
-// import ProfilePage from './pages/employer/ProfilePage'; // ← Temporarily commented out
+// import ProfilePage from './pages/employer/ProfilePage'; // commented to avoid errors
+// import AddApplicationsPage from './components/dashboard/AddApplicationsPage'; // commented to avoid errors
 
 // Admin Pages
 import AdminLayout from './admin/AdminLayout';
 import AdminDashboard from './admin/pages/AdminDashboard';
 
-// Shared Logic
+// Shared
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -57,6 +57,7 @@ const App = () => {
           <Route path="myjobs" element={<MyJobs />} />
           <Route path="settings" element={<Settings />} />
           <Route path="notifications" element={<NotificationPage />} />
+          {/* <Route path="myapplications" element={<AddApplicationsPage />} /> */}
         </Route>
 
         {/* Employer Dashboard Routes */}
@@ -92,14 +93,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/*<Route
-          path="/employer/manage-jobs"
-          element={
-            <ProtectedRoute allowedRoles={['employer']}>
-              <ManageJobsPage />
-            </ProtectedRoute>
-          }
-        />*/}
         {/* <Route
           path="/employer/profile"
           element={
@@ -122,7 +115,7 @@ const App = () => {
           <Route path="dashboard" element={<AdminDashboard />} />
         </Route>
 
-        {/* Fallback Route */}
+        {/* Fallback */}
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </Router>
