@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight, Person } from 'react-bootstrap-icons';
-import { Link } from 'react-router-dom';
-import { Card, Button, Alert, Form } from 'react-bootstrap';
-import { Building, Envelope, Phone, Globe, Facebook } from 'react-bootstrap-icons';
+import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight, Person, Building, Envelope, Phone, Facebook } from 'react-bootstrap-icons';
 import { SiTiktok } from 'react-icons/si';
 import { MdBusiness } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+import { Card, Button, Alert, Form } from 'react-bootstrap';
+
+// Import Firestore functions from Firebase SDK
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+
+// Your Firebase config should be initialized in a separate file 
+// (for example, firebaseConfig.js) that you import here.
+const db = getFirestore();
 
 const EmployerSidebar = ({ collapsed, toggleSidebar }) => {
     return (
@@ -55,8 +62,10 @@ const ProfilePage = () => {
     const [editMode, setEditMode] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
+    const auth = getAuth();
+    const currentUserEmail = auth.currentUser ? auth.currentUser.email : "email@incident.com";
     const [profileData, setProfileData] = useState({
-        email: "email@incident.com",
+        email: currentUserEmail,
         phone: "0 123 455 7890",
         business_name: "Mamzo spaza shop",
         about: `Spare control gives working on things on Wifi Store. Full satisfaction buttons running in length on Wifi Store.
@@ -72,7 +81,6 @@ const ProfilePage = () => {
         postalCode: "0183",
     });
 
-
     const toggleSidebar = () => setCollapsed(!collapsed);
     const toggleEditMode = () => setEditMode(!editMode);
 
@@ -84,15 +92,25 @@ const ProfilePage = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setSubmitted(true);
-        setEditMode(false);
-        setTimeout(() => setSubmitted(false), 3000);
+        try {
+            const docRef = doc(db, "employerProfiles", profileData.email);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                // Update the existing document
+                await updateDoc(docRef, profileData);
+            } else {
+                // Create a new document
+                await setDoc(docRef, profileData);
+            }
+            setSubmitted(true);
+            setEditMode(false);
+            setTimeout(() => setSubmitted(false), 3000);
+        } catch (error) {
+            console.error("Error saving employer profile:", error);
+        }
     };
-
-
-
 
     return (
         <div className="d-flex">
@@ -231,7 +249,7 @@ const ProfilePage = () => {
                                             />
                                         </Form.Group>
                                         <Form.Group className="mb-3">
-                                            <Form.Label>Postal Code</Form.Label>
+                                            <Form.Label>Province</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 name="province"
@@ -252,7 +270,7 @@ const ProfilePage = () => {
                                 ) : (
                                     <ul className="list-unstyled">
                                         <li><strong>Province:</strong> {profileData.province}</li>
-                                        <li><strong>Address:</strong> {profileData.streetName},{profileData.postalCode},{profileData.city}</li>
+                                        <li><strong>Address:</strong> {profileData.streetName}, {profileData.postalCode}, {profileData.city}</li>
                                     </ul>
                                 )}
                             </section>

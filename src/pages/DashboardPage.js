@@ -60,65 +60,68 @@ const DashboardPage = () => {
   return (
     <div className="dashboard-container">
       {/* Mobile Header */}
-      <div className="top-navbar bg-white shadow-sm">
-        <div className="d-flex align-items-center">
-          <Button 
-            variant="link" 
-            className="hamburger-btn"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          >
-            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </Button>
-          <h4 className="brand-name mb-0">CareerConnect Pro</h4>
+        <div className="top-navbar bg-white shadow-sm">
+          <div className="d-flex align-items-center">
+            <Button 
+          variant="link" 
+          className="hamburger-btn"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+          {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+            </Button>
+            <h4 className="brand-name mb-0">CareerConnect Pro</h4>
+          </div>
+          
+          <div className="d-flex align-items-center gap-3">
+            <Button variant="light" className="position-relative">
+          <Bell size={18} />
+          <span className="badge bg-danger notification-badge">3</span>
+            </Button>
+            <Button 
+          variant="outline-danger" 
+          onClick={handleLogout}
+          className="logout-btn"
+            >
+          <LogOut size={18} className="me-2" />
+          Sign Out
+            </Button>
+          </div>
         </div>
-        
-        <div className="d-flex align-items-center gap-3">
-          <Button variant="light" className="position-relative">
-            <Bell size={18} />
-            <span className="badge bg-danger notification-badge">3</span>
-          </Button>
-          <Button 
-            variant="outline-danger" 
-            onClick={handleLogout}
-            className="logout-btn"
-          >
-            <LogOut size={18} className="me-2" />
-            Sign Out
-          </Button>
+
+        /* Collapsible Sidebar */
+        <div className="sidebar open">
+          <div className="sidebar-header">
+            <h4>CareerConnect Pro</h4>
+          </div>
+          <nav className="nav flex-column">
+            <Button variant="link" className="nav-link active">
+              <BarChart className="me-2" size={18} />
+              Dashboard
+            </Button>
+            <Button variant="link" className="nav-link" onClick={() => navigate('profile')}>
+              <User className="me-2" size={18} />
+              My Profile
+            </Button>
+            <Button variant="link" className="nav-link" onClick={() => navigate('myjobs')}>
+              <Briefcase className="me-2" size={18} />
+              My Potential Jobs
+            </Button>
+            <Button variant="link" className="nav-link" onClick={() => navigate('myapplications')}>
+              <FileText className="me-2" size={18} />
+              My Applications
+            </Button>
+            <Button variant="link" className="nav-link" onClick={() => navigate('NotificationPage')}>
+              <Bell className="me-2" size={18} />
+              Notifications
+            </Button>
+            <Button variant="link" className="nav-link" onClick={() => navigate('settings')}>
+              <Settings className="me-2" size={18} />
+              Settings
+            </Button>
+          </nav>
         </div>
-      </div>
 
-      {/* Collapsible Sidebar */}
-      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h4>CareerConnect Pro</h4>
-        </div>
-        <nav className="nav flex-column">
-          <Button variant="link" className="nav-link active">
-            <BarChart className="me-2" size={18} />
-            Dashboard
-          </Button>
-          <Button variant="link" className="nav-link" onClick={() => navigate('profile')}>
-            <User className="me-2" size={18} />
-            My Profile
-          </Button>
-          <Button variant="link" className="nav-link"onClick={() => navigate('myjobs')}>
-            <Briefcase className="me-2" size={18} />
-            My Applications
-          </Button>
-          <Button variant="link" className="nav-link" onClick={() => navigate('NotificationPage')}>
-            <Bell className="me-2" size={18} />
-            Notifications
-          </Button>
-          <Button variant="link" className="nav-link" onClick={() => navigate('settings')}>
-  <Settings className="me-2" size={18} />
-  Settings
-</Button>
-
-        </nav>
-      </div>
-
-      {/* Main Content */}
+        {/* Main Content */}
       <div className="main-content">
         {location.pathname === '/dashboard' ? (
           <>
