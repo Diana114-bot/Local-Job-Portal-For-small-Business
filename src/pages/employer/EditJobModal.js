@@ -12,6 +12,19 @@ const EditJobModal = ({ show, onHide, jobData }) => {
         <form action="/your-submit-endpoint" method="POST">
           <h4 className="mb-3 text-primary">Edit Job</h4>
 
+          {/* Title */}
+          <Row className="mb-3">
+            <Col md={6}>
+              <label className="form-label">Title</label>
+              <input
+                type="text"
+                name="title"
+                className="form-control"
+                defaultValue={jobData.title}
+              />
+            </Col>
+          </Row>
+
           {/* Category */}
           <Row className="mb-3">
             <Col md={6}>

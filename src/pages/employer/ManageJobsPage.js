@@ -2,7 +2,7 @@ import { List, HouseDoor, Briefcase, People, Gear, BoxArrowRight, CheckCircle, P
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
-import { Modal, Row, Col ,Button } from 'react-bootstrap';
+import { Modal, Row, Col, Button } from 'react-bootstrap';
 import { FaMoneyBillWave } from 'react-icons/fa';
 import EditJobModal from './EditJobModal';
 
@@ -122,7 +122,7 @@ const ManageJobsPage = () => {
     const handleConfirmDelete = (jobToDelete) => {
         // Example: call your API or update state here
         console.log("Deleting job:", jobToDelete);
-    
+
         setShowDeleteModal(false);
         setSelectedJob(null);
     };
@@ -194,14 +194,11 @@ const ManageJobsPage = () => {
                 <h3 className="mb-4">Manage Jobs</h3>
 
                 <div className="row g-4 mb-4">
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                         <StatCard title="Jobs Posted" value="2" icon={Briefcase} />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                         <StatCard title="Applications" value="3" icon={People} />
-                    </div>
-                    <div className="col-md-4">
-                        <StatCard title="Active Jobs" value="1" icon={CheckCircle} />
                     </div>
                 </div>
 
@@ -226,7 +223,6 @@ const ManageJobsPage = () => {
                             <tr>
                                 <th>Job Title</th>
                                 <th>Applications</th>
-                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -244,11 +240,6 @@ const ManageJobsPage = () => {
                                         </small>
                                     </td>
                                     <td>{job.applications}</td>
-                                    <td>
-                                        <span className={`badge ${job.status === 'Active' ? 'bg-success' : 'bg-secondary'}`}>
-                                            {job.status}
-                                        </span>
-                                    </td>
                                     <td>
                                         <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleViewProfile(job)}>
                                             <FaEye />
@@ -274,8 +265,7 @@ const ManageJobsPage = () => {
                     <Modal.Body>
                         {selectedJob && (
                             <div>
-                                <h4 className="mb-3 text-primary">{selectedJob.jobTitle}</h4>
-
+                                <h4 className="mb-3 text-primary">{selectedJob.title}</h4>
                                 <Row className="mb-3">
                                     <Col md={6}>
                                         <strong>Category:</strong>
@@ -347,12 +337,14 @@ const ManageJobsPage = () => {
 
                         </Modal.Body>
                         <Modal.Footer>
+                            <form action="/your-submit-endpoint" method="POST">
                             <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
                                 Cancel
                             </Button>
-                            <Button variant="danger" onClick={()  => handleConfirmDelete(selectedJob)}> 
+                            <Button variant="danger"  type="submit" onClick={() => handleConfirmDelete(selectedJob)}>
                                 Delete
                             </Button>
+                        </form>
                         </Modal.Footer>
                     </Modal>
                 )}
